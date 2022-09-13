@@ -8,6 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=go-src
 PKG_VERSION:=1.18.4
+PKG_VERSION_BOOTSTRAP:=1.19
 
 PKG_SOURCE:=go$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=https://dl.google.com/go
@@ -18,7 +19,7 @@ include $(INCLUDE_DIR)/host-build.mk
 
 define Host/Compile
 	(cd $(STAGING_DIR_HOST)/go/src ; \
-		GOROOT_BOOTSTRAP=$(STAGING_DIR_HOST)/go1.4 ./make.bash --no-clean ; \
+		GOROOT_BOOTSTRAP=$(STAGING_DIR_HOST)/go$(PKG_VERSION_BOOTSTRAP) ./make.bash --no-clean ; \
 	)
 endef
 

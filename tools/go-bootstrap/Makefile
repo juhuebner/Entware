@@ -8,16 +8,20 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=go-bootstrap
 PKG_VERSION:=1.4.3
+PKG_VERSION:=1.19
 OS=$(shell uname | tr 'A-Z' 'a-z')
 bintype:=$(shell uname -m | sed \
         -e 's/i[3-9]86/386/' \
         -e 's/x86_64/amd64/' \
 )
+ifeq ($(bintype),armv7l)
+  bintype:=armv6l
+endif
 
 PKG_SOURCE:=go$(PKG_VERSION).$(OS)-$(bintype).tar.gz
-PKG_HASH:=ce3140662f45356eb78bc16a88fc7cfb29fb00e18d7c632608245b789b2086d2
-PKG_SOURCE_URL:=https://storage.googleapis.com/golang
-HOST_BUILD_DIR:=$(STAGING_DIR_HOST)/go1.4
+PKG_HASH:=25197c7d70c6bf2b34d7d7c29a2ff92ba1c393f0fb395218f1147aac2948fb93
+PKG_SOURCE_URL:=https://go.dev/dl/
+HOST_BUILD_DIR:=$(STAGING_DIR_HOST)/go$(PKG_VERSION)
 HOST_UNPACK:=gzip -dc $(DL_DIR)/$(PKG_SOURCE) | tar -C $(HOST_BUILD_DIR) --strip-components=1 -xf -
 
 include $(INCLUDE_DIR)/host-build.mk
@@ -31,7 +35,7 @@ define Host/Install
 endef
 
 define Host/Clean
-	rm -rf $(STAGING_DIR_HOST)/go1.4
+	rm -rf $(STAGING_DIR_HOST)/go$(PKG_VERSION)
 endef
 
 $(eval $(call HostBuild))
